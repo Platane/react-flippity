@@ -1,38 +1,26 @@
 import React, { Component } from 'react'
 import Flipity              from '../src/index'
+import Item                 from './item'
 
 
 const style = {
     list: {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         width: '60%',
         marginRight: 'auto',
         marginLeft: 'auto',
         flexWrap: 'wrap',
     },
-    item: {
-        width: 50,
-        height: 50,
-        margin: 25,
-    },
 }
-const color = [
-    '#243123',
-    '#ab423e',
-    '#3eab42',
-    '#d49e24',
-    '#796026',
-    '#267975',
-]
-const List = ({ items }) =>
+const List = ({ items, resize }) =>
 (
     <Flipity listStyle={ style.list }>
         {
             () => items.map( x =>
-                <div key={ x.id}>
-                    <div style={{ ...style.item, backgroundColor: color[ x.id % color.length ] }} />
-                </div>
+                <Item key={ x.id } {...x} resize={resize} />
             )
         }
     </Flipity>

@@ -4,55 +4,56 @@ import List                 from './list'
 import Menu                 from './menu'
 
 import "./index.html"
+import { shuffle, remove, add, rotate, rotateBack } from './arrayMethod'
+
 
 class App extends Component {
 
     constructor(){
         super()
 
-        this.state = { items:[{id:1},{id:2},{id:3},{id:4}] }
+        this.state = {
+            resizable: false,
+            items:[
+                {id:1, width: 50, height: 50},
+                {id:2, width: 50, height: 50},
+                {id:3, width: 50, height: 50},
+            ]
+        }
 
         this.methods = {
-            shuffle : () =>
+            shuffle     : () => this.setState({ items: shuffle( this.state.items ) }),
+            remove      : () => this.setState({ items: remove( this.state.items ) }),
+            rotate      : () => this.setState({ items: rotate( this.state.items ) }),
+            rotateBack  : () => this.setState({ items: rotateBack( this.state.items ) }),
+            add         : () =>
                 this.setState({
-                    items: this.state.items.sort( (a,b) => Math.random() > 0.5 )
-                })
-            ,
+                    items: add(
+                        this.state.items, {
+                            id : this.state.items.reduce((max,item) => Math.max(item.id,max),1)+1,
+                            width : 50,
+                            height : 50,
+                        }
+                    )
+                }),
+            resize     : (id,size) => this.setState({
+                items: this.state.items
+                    .map(
+                        item => item.id == id
+                            ? {...item, ...size}
+                            : item
+                    )
+            }),
 
-            rotate  : () =>
-                this.setState({
-                    items: this.state.items.length == 0
-                        ? []
-                        : [ ...this.state.items.slice(1), this.state.items[0] ]
-                })
-            ,
-
-            rotateBack  : () =>
-                this.setState({
-                    items: this.state.items.length == 0
-                        ? []
-                        : [ this.state.items[this.state.items.length-1], ...this.state.items.slice(0,-1) ]
-                })
-            ,
-
-            addOne  : () =>
-                this.setState({ items: [ {id:this.state.items.reduce((i,x) => Math.max(i,x.id),0)+1}, ...this.state.items] })
-            ,
-
-            removeOne  : () =>
-                this.setState({
-                    items: this.state.items.length == 0
-                        ? []
-                        : this.state.items.slice( 1 )
-                    })
+            setResizable : (resizable) => this.setState({ resizable })
         }
     }
 
     render(){
         return (
             <div>
-                <Menu { ...this.methods }/>
-                <List { ...this.state } />
+                <Menu { ...this.methods } resizable={ this.state.resizable } />
+                <List { ...this.state } resize={ this.state.resizable && this.methods.resize }  />
             </div>
         )
     }
