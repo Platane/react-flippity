@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Flipity              from '../src/index'
+import Flippity              from '../src/index'
 import Item                 from './item'
 
 
@@ -17,13 +17,13 @@ const style = {
 }
 const List = ({ items, resize }) =>
 (
-    <Flipity listStyle={ style.list } stiffness={ 0.01 } damping={ 0.15 } >
+    <Flippity listStyle={ style.list } stiffness={ 0.01 } damping={ 0.15 } >
         {
             () => items.map( x =>
                 <Item key={ x.id } {...x} resize={resize} />
             )
         }
-    </Flipity>
+    </Flippity>
 )
 
 export default List

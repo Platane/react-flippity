@@ -8,7 +8,7 @@ const transform = ({ x, y }) =>
         WebkitTransform: `translate3d(${ x }px, ${ y }px, 0)`,
     })
 
-class Flipity extends Component {
+class Flippity extends Component {
 
     constructor(){
         super()
@@ -156,6 +156,7 @@ class Flipity extends Component {
                                 key={child.key}
                                 ref={child.key}
                                 style={{
+                                    ...(this.props.itemStyle||{}),
                                     ...(
                                         this.shouldMesure || !this.state.animationRunning
                                             ? {}
@@ -171,4 +172,4 @@ class Flipity extends Component {
 
 }
 
-export default Flipity
+export default Flippity
