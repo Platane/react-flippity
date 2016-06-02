@@ -1,6 +1,6 @@
 import React, { Component, Children } from "react"
 
-import {acc}     from './computeMotion'
+import {acc, cold}     from './computeMotion'
 
 const transform = ({ x, y }) =>
     ({
@@ -13,86 +13,114 @@ class Flipity extends Component {
     constructor(){
         super()
 
-        this.state = {}
-
-        this.animationRunning = false
-        this.killAnimationFrame = null
-
-        this.pos    = {}
-        this.v      = {}
-    }
-
-    step(){
-
-        let running = false
-
-        for ( let key in this.pos ) {
-
-            const v = this.v[ key ]
-            const pos = this.pos[ key ]
-
-            v.x += acc( pos.x, v.x, 0 )
-            v.y += acc( pos.y, v.y, 0 )
-
-            pos.x += v.x
-            pos.y += v.y
-
-            if ( v.x < 0.1 && v.y < 0.1 && Math.abs( pos.x ) < 0.1 && Math.abs( pos.y ) < 0.1 ) {
-
-                pos.x = 0
-                pos.y = 0
-                v.x = 0
-                v.y = 0
-
-            } else
-                running = true
-
+        this.state = {
+            animationRunning : false,
+            positions   : {},
+            velocities  : {}
         }
 
-        this.animationRunning = running
+        // to kill the request animation frame
+        this.killAnimationFrame = null
+    }
 
-        this.forceUpdate()
+    /**
+     * step the physical world,
+     * update the positions and velocities
+     * also set the value animationRunning
+     *
+     */
+    step(){
 
-        if ( running ) {
+        let animationRunning = false
+        const positions     = this.state.positions
+        const velocities    = this.state.velocities
+
+        const precision     = this.props.precision || 0.1
+        const stiffness     = this.props.stiffness || 0.01
+        const damping       = this.props.damping || 0.15
+
+        // for each item, step the position
+        for ( let key in positions ) {
+
+            const v     = velocities[ key ]
+            const p     = positions[ key ]
+
+            // compute the acceleration on the x axis ( the position target is 0,0 )
+            v.x += acc( stiffness, damping, p.x, v.x, 0 )
+            v.y += acc( stiffness, damping, p.y, v.y, 0 )
+
+            // step the position
+            p.x += v.x
+            p.y += v.y
+
+            // consider the animation done when every item is "cold"
+            // meaning the velocity is null, and the position is on the target ( which is 0 )
+            animationRunning = animationRunning || !cold( precision, p, {x:0,y:0}, v )
+        }
+
+        // ask for re-render
+        this.setState({
+            animationRunning,
+            velocities,
+            positions : animationRunning ? positions : {}
+        })
+
+        // animation loop
+        if ( animationRunning ) {
             cancelAnimationFrame( this.killAnimationFrame )
             this.killAnimationFrame = requestAnimationFrame( this.step.bind( this ) )
         }
     }
 
+    /**
+     * should be called at the start of an animation, when the elements are still in the old positions
+     * save the positions to compute the delta later
+     *
+     */
     computeStartingPosition(){
         this.source = {}
 
-        Object.keys( this.refs )
-            .forEach( key => {
+        for ( let key in this.refs ) {
 
-                const box = this.refs[ key ].getBoundingClientRect()
+            const box = this.refs[ key ].getBoundingClientRect()
 
-                this.source[ key ] = {
-                    x: box.left,
-                    y: box.top,
-                }
-            })
+            this.source[ key ] = {
+                x: box.left,
+                y: box.top,
+            }
+        }
     }
 
+    /**
+     * should be called after the reflow, when the elements are in the desired positions
+     * use the saved old positions to compute the delta,
+     * also set the velocity if the item have been added, keep the same if it exists before
+     *
+     */
     computeTargetPosition(){
-        this.pos    = {}
-        const v     = {}
 
-        Object.keys( this.refs )
-            .forEach( key => {
+        const positions  = {}
+        const velocities = {}
 
-                const source = this.source[ key ]
-                const box = this.refs[ key ].getBoundingClientRect()
+        for ( let key in this.refs ) {
 
-                const origin = { x: box.left, y: box.top }
+            const source = this.source[ key ]
+            const box = this.refs[ key ].getBoundingClientRect()
 
-                this.pos[ key ] = source
-                    ? { x:source.x - origin.x, y:source.y - origin.y }
-                    : {x:0, y:0}
-                v[ key ] = this.v[ key ] || {x:0, y:0}
-            })
+            const origin = { x: box.left, y: box.top }
 
-        this.v = v
+            // if the source does not exist, that's means that the element have been added
+            // in this case set the delta position to 0 ( no animation )
+            positions[ key ] = source
+                ? { x:source.x - origin.x, y:source.y - origin.y }
+                : {x:0, y:0}
+
+            velocities[ key ] = this.state.velocities[ key ] || {x:0, y:0}
+        }
+
+        this.source = null
+
+        this.setState({ positions, velocities })
     }
 
     componentWillReceiveProps( nextProps ) {
@@ -113,14 +141,12 @@ class Flipity extends Component {
 
             this.shouldMesure = false
             this.step()
-            return
         }
     }
 
     render(){
 
         const renderedChildren = this.props.children( this.state )
-
         return (
             <div style={this.props.listStyle} >
                 {
@@ -131,9 +157,9 @@ class Flipity extends Component {
                                 ref={child.key}
                                 style={{
                                     ...(
-                                        this.shouldMesure || !this.animationRunning
+                                        this.shouldMesure || !this.state.animationRunning
                                             ? {}
-                                            : transform( this.pos[child.key]||{x:0,y:0} )
+                                            : transform( this.state.positions[child.key]||{x:0,y:0} )
                                     )
                                 }}
                                 >{ child }</div>
