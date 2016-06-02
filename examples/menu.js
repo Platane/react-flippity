@@ -8,7 +8,7 @@ const style = {
     },
 }
 
-const Menu = ({ add, remove, shuffle, rotate, rotateBack, setResizable, resizable }) =>
+const Menu = ({ add, remove, shuffle, rotate, rotateBack, randomSize, setResizable, resizable }) =>
 (
     <div style={ style.container } >
         <button onClick={ add } >add one</button>
@@ -17,6 +17,7 @@ const Menu = ({ add, remove, shuffle, rotate, rotateBack, setResizable, resizabl
         <button onClick={ rotate } >rotate</button>
         <button onClick={ rotateBack } >rotate back</button>
         <button onClick={ rotateBack } >rotate back</button>
+        <button onClick={ randomSize } >random size</button>
         <input type="checkbox" checked={resizable} onChange={ event => setResizable(event.target.checked) } />
     </div>
 )

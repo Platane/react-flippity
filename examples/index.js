@@ -45,7 +45,17 @@ class App extends Component {
                     )
             }),
 
-            setResizable : (resizable) => this.setState({ resizable })
+            setResizable : (resizable) => this.setState({ resizable }),
+            randomSize : () =>
+                this.setState({
+                    items: this.state.items.map( x =>
+                        ({
+                            ...x,
+                            width : Math.random() * 100 + 30,
+                            height : Math.random() * 100 + 30,
+                        })
+                    )
+                }),
         }
     }
 
