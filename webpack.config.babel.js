@@ -4,7 +4,7 @@ const webpack = require('webpack')
 module.exports = {
 
     entry: {
-        'index' : [ './examples/index.js' ],
+        './index' : [ './examples/index.js' ],
     },
 
     output: {
@@ -23,7 +23,7 @@ module.exports = {
             {
                 test: /\.html?$/,
                 exclude: /node_modules/,
-                loader: "file?name=[path][name].html",
+                loader: "file?name=[name].html",
             },
         ]
     },

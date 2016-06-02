@@ -23,6 +23,7 @@
     },
 
     "scripts": {
-        "start"         : "webpack-dev-server --port 8082 --content-base ./examples -d"
+        "start"             : "webpack-dev-server --port 8082 --content-base ./examples -d",
+        "build:examples"    : "webpack"
     }
 }
