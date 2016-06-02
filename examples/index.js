@@ -23,7 +23,7 @@ class App extends Component {
 
         this.methods = {
             shuffle     : () => this.setState({ items: shuffle( this.state.items ) }),
-            remove      : () => this.setState({ items: remove( this.state.items ) }),
+            remove      : () => this.setState({ items: remove( this.state.items, 0|(Math.random() * 100) ) }),
             rotate      : () => this.setState({ items: rotate( this.state.items ) }),
             rotateBack  : () => this.setState({ items: rotateBack( this.state.items ) }),
             add         : () =>

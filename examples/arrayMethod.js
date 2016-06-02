@@ -13,7 +13,7 @@ export const rotateBack = a =>
         : [ a[ a.length-1 ], ...a.slice(0,-1) ]
 
 export const remove = ( a, index=0 ) =>
-    a.filter( (_,i) => i==(index%a.length) )
+    a.filter( (_,i) => i!=(index%a.length) )
 
 export const add = ( a, x, index=0 ) => {
     const _a = a.slice()
