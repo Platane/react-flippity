@@ -1,7 +1,7 @@
 # react-flippity
 
 
-![moss it crowd](https://raw.githubusercontent.com/Platane/react-flippity/master/asset/moss.js)
+![moss it crowd](https://raw.githubusercontent.com/Platane/react-flippity/master/asset/moss.jpg)
 
 >_You think it's a flippin' game?_
 
