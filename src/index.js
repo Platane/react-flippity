@@ -148,15 +148,17 @@ class Flippity extends Component {
 
         const renderedChildren = this.props.children( this.state )
         return (
-            <div style={this.props.listStyle} >
+            <div style={this.props.style} className={this.props.className} >
                 {
                     renderedChildren
                         .map( child =>
                             <div
+
                                 key={child.key}
                                 ref={child.key}
+                                className={this.props.childClassName}
                                 style={{
-                                    ...(this.props.itemStyle||{}),
+                                    ...(this.props.childStyle||{}),
                                     ...(
                                         this.shouldMesure || !this.state.animationRunning
                                             ? {}
