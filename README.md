@@ -5,7 +5,7 @@
 
 >_You think it's a flippin' game?_
 
-Animate list of elements using FLIP trick.
+Animate a list of elements using FLIP trick.
 
 [demo](http://Platane.github.io/react-flippity/)
 
@@ -32,7 +32,7 @@ For every change in the `items` list, Flippity will make a nice transition to th
 
 ### Styling
 
-The code below will produce this markup:
+The previous code will produce this markup:
 
 ```html
 <div>
@@ -59,7 +59,7 @@ The physic spring can be customized with the props `stiffness`, `damping` and `p
 
 ## References
 
- - [FLIP animation technique](https://aerotwist.com/blog/flip-your-animations/) by [__@paullewis__](https://github.com/paullewis), which allows to easily make transition between two state, relying on the browser computation layout.
+ - [FLIP animation technique](https://aerotwist.com/blog/flip-your-animations/) by [__@paullewis__](https://github.com/paullewis), which allows to easily make transitions between two states, relying on the browser computation layout.
  - [react-motion](https://github.com/chenglou/react-motion) by [__@chenglou__](https://github.com/chenglou), from which I borrowed the spring physic based animation.
  - [react-motion-flip](https://github.com/bloodyowl/react-motion-flip) by [__@bloodyowl__](https://github.com/bloodyowl), which use clever tricks.
 
@@ -70,7 +70,7 @@ The physic spring can be customized with the props `stiffness`, `damping` and `p
 ## TODO
 
 - [ ] publish to npm
-- [ ] compute acceleration based on actual time ( not n of frame )
+- [ ] compute acceleration based on actual time ( not number of frame )
 - [ ] animate width and height
 - [ ] test :tropical_fish:
 - [ ] animate with webAnimation API
