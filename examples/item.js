@@ -4,7 +4,6 @@ const style = {
     item: {
         width: 50,
         height: 50,
-        margin: 20,
         display: 'flex',
         flexDirection: 'column',
     },

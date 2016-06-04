@@ -14,10 +14,13 @@ const style = {
         marginLeft: 'auto',
         flexWrap: 'wrap',
     },
+    item: {
+        margin: 20,
+    }
 }
 const List = ({ items, resize }) =>
 (
-    <Flippity style={ style.list } className="list" childClassName="item" childStyle={{ position: 'relative' }} stiffness={ 0.01 } damping={ 0.15 } >
+    <Flippity style={ style.list } className="list" childClassName="item" childStyle={ style.item } stiffness={ 0.01 } damping={ 0.15 } >
         {
             () => items.map( x =>
                 <Item key={ x.id } {...x} resize={resize} />

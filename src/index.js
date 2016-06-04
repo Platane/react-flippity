@@ -2,11 +2,13 @@ import React, { Component, Children } from "react"
 
 import {acc, cold}     from './computeMotion'
 
-const transform = ({ x, y }) =>
-    ({
-        transform: `translate3d(${ x }px, ${ y }px, 0)`,
-        WebkitTransform: `translate3d(${ x }px, ${ y }px, 0)`,
-    })
+const transform = ({ x, y, sx, sy }) => {
+    const value = `translate3d(${ x }px, ${ y }px, 0) translate3d(${ -50*(1-sx) }%, ${ -50*(1-sy) }%,0) scale(${ sx },${ sy }) `
+    return {
+        transform: value,
+        WebkitTransformtransform: value,
+    }
+}
 
 class Flippity extends Component {
 
@@ -48,14 +50,18 @@ class Flippity extends Component {
             // compute the acceleration on the x axis ( the position target is 0,0 )
             v.x += acc( stiffness, damping, p.x, v.x, 0 )
             v.y += acc( stiffness, damping, p.y, v.y, 0 )
+            v.sx += acc( stiffness, damping, p.sx, v.sx, 1 )
+            v.sy += acc( stiffness, damping, p.sy, v.sy, 1 )
 
             // step the position
             p.x += v.x
             p.y += v.y
+            p.sx += v.sx
+            p.sy += v.sy
 
             // consider the animation done when every item is "cold"
             // meaning the velocity is null, and the position is on the target ( which is 0 )
-            animationRunning = animationRunning || !cold( precision, p, {x:0,y:0}, v )
+            animationRunning = animationRunning || !cold( precision, p, {x:0,y:0,sx:0,sy:0}, v )
         }
 
         // ask for re-render
@@ -85,8 +91,10 @@ class Flippity extends Component {
             const box = this.refs[ key ].getBoundingClientRect()
 
             this.source[ key ] = {
-                x: box.left,
-                y: box.top,
+                x       : box.left,
+                y       : box.top,
+                width   : box.width,
+                height  : box.height,
             }
         }
     }
@@ -107,15 +115,20 @@ class Flippity extends Component {
             const source = this.source[ key ]
             const box = this.refs[ key ].getBoundingClientRect()
 
-            const origin = { x: box.left, y: box.top }
+            const origin = { x: box.left, y: box.top, width:box.width||1, height:box.height||1 }
 
             // if the source does not exist, that's means that the element have been added
             // in this case set the delta position to 0 ( no animation )
             positions[ key ] = source
-                ? { x:source.x - origin.x, y:source.y - origin.y }
-                : {x:0, y:0}
+                ? {
+                    x   : source.x - origin.x,
+                    y   : source.y - origin.y,
+                    sx  : source.width / origin.width,
+                    sy  : source.height / origin.height
+                }
+                : { x:0, y:0, sx:1, sy:1 }
 
-            velocities[ key ] = this.state.velocities[ key ] || {x:0, y:0}
+            velocities[ key ] = this.state.velocities[ key ] || {x:0, y:0, sx:0, sy:0}
         }
 
         this.source = null
@@ -162,7 +175,7 @@ class Flippity extends Component {
                                     ...(
                                         this.shouldMesure || !this.state.animationRunning
                                             ? {}
-                                            : transform( this.state.positions[child.key]||{x:0,y:0} )
+                                            : transform( this.state.positions[child.key]||{x:0,y:0,sx:1,sy:1} )
                                     )
                                 }}
                                 >{ child }</div>

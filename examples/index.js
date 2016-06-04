@@ -6,7 +6,6 @@ import Menu                 from './menu'
 import "./index.html"
 import { shuffle, remove, add, rotate, rotateBack } from './arrayMethod'
 
-
 class App extends Component {
 
     constructor(){
@@ -51,8 +50,8 @@ class App extends Component {
                     items: this.state.items.map( x =>
                         ({
                             ...x,
-                            width : Math.random() * 100 + 30,
-                            height : Math.random() * 100 + 30,
+                            width : Math.random() * 150 + 30,
+                            height : Math.random() * 150 + 30,
                         })
                     )
                 }),
