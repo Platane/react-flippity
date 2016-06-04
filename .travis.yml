@@ -17,3 +17,13 @@ before_script:
 
 after_success:
     - test $TRAVIS_BRANCH = "master" && script/deploy-gh-pages.sh
+
+deploy:
+    provider: npm
+    email: me@platane.me
+    on:
+        branch: master
+        repo: Platane/react-flippity
+    skip_cleanup: true
+    api_key:
+        secure: "gphzVtIhpYtfaWbRI7SfSuRIEd1iL2VEMIxMO90ieqVgAosJ/PdLrVaVgw7LC5QPhyN9uxC6VpH3Tab7GoX+RyTkxxr39Tz6rjeGUZi4cRvECZe0XsknSJxhyWHbOTUsMJbdmOXTzluaO6AJ9XFULu43SEcA5ATS5BRgk8GXk30ScM2nLUgK8RxHpQSilPUP8Zpg/FbNc1tD1b+5gl7/7Q8nNxI8wM/MkBZ/IFFXPlr3iafsBkAf/OFmV8AzRFRbSGtkrs74WAe7ijbW0aSGvlX8GmVexlMHratkFe+OBWT/fygp9XbkuU3KGOpdw4yljKdLwUQZcjwtxx7TXGgl5PO3SzmBbypcj6OWcaBvxOxeLhXM9z3tJHjJUEpwtfnhLTA9bI2hk+V/GgM7R5nAMlhjmell8sFgyypUMCjk1b0QGTmfoEdjkTy8HJ+kX78tYfBFWqeP3J5+3Ie1cOTCl30xyPa3TSjkrLkMzcYxOpord2BkJKPPPfyd3Q1mHgRc2KpypsbepT2wiEOu2v44ENJ2Y0rrP9HaEFc4RTDz7Kx7nFyu1oe/3+8DxHFwV19hrkorIxH7iZY8fmVWVAeeL3rglqRz34IEDnkx004+afavKm2Tz5YELhs6xT6xiKSCxA7cMtBSxJ7SDRQQnVeYubz3dzl/D2tah26ycUlBCB8="
