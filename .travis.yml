@@ -19,3 +19,4 @@ deploy:
   on:
     repo: Platane/react-flippity
     branch: master
+  skip_cleanup: true
