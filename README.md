@@ -69,8 +69,8 @@ The physic spring can be customized with the props `stiffness`, `damping` and `p
 
 ## TODO
 
-- [ ] publish to npm
+- [v] publish to npm
+- [v] animate width and height
 - [ ] compute acceleration based on actual time ( not number of frame )
-- [ ] animate width and height
 - [ ] test :tropical_fish:
 - [ ] animate with webAnimation API
