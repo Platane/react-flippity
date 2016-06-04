@@ -36,6 +36,7 @@
     "scripts": {
         "start"             : "webpack-dev-server --port 8082 --content-base ./examples -d",
         "build:examples"    : "webpack",
-        "build:lib"         : "babel --out-dir lib src"
+        "build:lib"         : "babel --out-dir lib src",
+        "prepublish"        : "npm run build:lib"
     }
 }

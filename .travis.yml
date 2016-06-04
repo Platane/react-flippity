@@ -1,29 +1,21 @@
 language: node_js
-
 sudo: false
-
 branches:
-    only:
-        - master
+  only:
+  - master
 git:
-    depth: 1
-
+  depth: 1
 node_js:
-    - '5'
-
-
+- '5'
 before_script:
-    - chmod -R +x script
-
+- chmod -R +x script
 after_success:
-    - test $TRAVIS_BRANCH = "master" && script/deploy-gh-pages.sh
-
+- test $TRAVIS_BRANCH = "master" && script/deploy-gh-pages.sh
 deploy:
-    provider: npm
-    email: me@platane.me
-    on:
-        branch: master
-        repo: Platane/react-flippity
-    skip_cleanup: true
-    api_key:
-        secure: RVpgqoI+HDa1pbNmqY9n/RRNKMRKh0uZzXs2O4YwVuvcA3c7q+IkNIawi0hU+Tx6EzOh0Kv/JdVTLp2BlSTWD+ZqZpa5AlI22NgLQ8sYxIH3gYBmFd4mXrzUehL+ot/9s4E9L3rgAjUyFLN85xN0Q+uqBK+TZQgQ7iey59jeAnVTz1MVttQXgrMMjdVJ+1wG89BtmG72U57FLMZojjwIfl0XOweweoRWkeGaeSFHrrgZDXyRRhum7ivHTZPe9vjv/Lbr2Q8hRHEzF4Af9prjknJFM0cKsu0R55Bu4uw03r9tYODvlVTEkq8f0j+EDjtiXFg4YW4StQB0+riEdYM4dpopdVZQfOSr+3Y5zjWVtAhlx+tbWqfjFDFJgtOS0ah9P/zOfL8rjNYk6D98KCA99p4IGTaemAYlZiJDArwM4Ii8BhDWCFElA1bSMx9axCV0NG/ZOaHfs9vT7oLItd/QWlJTA9kjxfzwbIxWIglZ0OgrVfNo7svNKOLDHXX8ECpGIU6EBHsotsXTLeFxMV8XasSGgMbE+r8MyZ3gAb7nveZ6feFkAhOi0PFM7wXDc+EZ6+eP6zSuZtX3gbE+hsEr9sFRK01XH9w6rsSWalz88kZFAegekjr9JsB/ec7PSpnpKOlA8XMezOOrdmeuyFk5txvREDNwcTN65klvFSrV/1A=
+  provider: npm
+  email: me@platane.me
+  api_key:
+    secure: oRqWjCLcTGge7o0JHpsGTkYRoPglfQrbRCAoUc/njetVaBgUYHTTvPpd0PLjlYs0P1VxtsI4rV1xkkwhyb2QulknTTnH3uzswSdMwkrzovn/Y/4hsKL44VOllIGaAQaFPKH8WWUxGXLJHdewcqzqDFIOSJZRNQxZ4+KfXYd+p4H7yFNSO4+Gyz0h+qKmvoAuTsUpehaDZeZOzQCapj35dcMYi/jM9qnM+drwPXJC4KKe39VvWg/Q8odtSoAO12fRK+XaRG3IewE+C6UamqBg8E7XIl2ZJQlugEe0oAL3ewxS4xehSWWl6wWkEWNq7WU4vL7Chz7LhzKLg6L0geW43698zVXFrxrJYTepk9nCK9D8EQnUWye8xyBcuKc+Lz5mOTDvVsKkQ/VHNVSXSV6F3jf4oJFLIgNhGCCByrlKkyn6iawFkq94K69o9bTDCo6DVOQFVe527anhlXmBYm+q3pNj+ud/JVAKl41FVOAUvuah/SYrbnc/KuIMc12l3xAdSFrz3x2UhxextO008qkPgp4+HjdqsLZvm1gGolVjeSGQkosf5z0tYUffjZA0em44So+0K3FS/yD6Z7Wna+eGckM9runuprKK8oeu+kHPCPvc2qqDdHSCMgOT3I6PdTW8rKUu2LWEeXfv6eD4aNnD8+s3Tx+rmX5UJV5Vjg07yt4=
+  on:
+    repo: Platane/react-flippity
+    branch: master
