@@ -1,8 +1,15 @@
 import React, { Component, Children } from "react"
 
-import {acc, cold}      from './computeMotion'
-import {animationSteps} from './animation'
+import {acc, compute as computeSpring}      from './math'
+import {animationSteps}                     from './animation'
 
+const velocityInstant = ( stiffness, damping, x0, v0, target, t ) =>
+    ({
+        x : computeSpring( stiffness, damping )( x0.x - target.x, v0.y ).v( t ),
+        y : computeSpring( stiffness, damping )( x0.y - target.y, v0.y ).v( t ),
+        sx : computeSpring( stiffness, damping )( x0.sx - target.sx, v0.sx ).v( t ),
+        sy : computeSpring( stiffness, damping )( x0.sy - target.sy, v0.sy ).v( t ),
+    })
 
 class Flippity extends Component {
 
@@ -12,6 +19,8 @@ class Flippity extends Component {
         this.state = {}
 
         this.kill = {}
+        this.animations = {}
+        this.startDate = null
 
         // to kill the request animation frame
         this.killAnimationFrame = null
@@ -49,7 +58,11 @@ class Flippity extends Component {
         const precision     = this.props.precision || 0.1
         const stiffness     = this.props.stiffness || 0.01
         const damping       = this.props.damping || 0.15
-        const period        = this.props.period || 200
+        const period        = this.props.period || 50
+
+        const now   = Date.now()
+        const t     = now - (this.startDate || 0)
+        this.startDate = now
 
         for ( let key in this.refs ) {
 
@@ -69,12 +82,29 @@ class Flippity extends Component {
                 }
                 : { x:0, y:0, sx:1, sy:1 }
 
-            const velocity = {x:0, y:0, sx:0, sy:0}
+            // compute the instant velocity
+            // or init it at null
+            const velocity = this.animations[ key ] && velocityInstant(
+                stiffness,
+                damping,
+                this.animations[ key ].x0,
+                this.animations[ key ].v0,
+                {x:0, y:0, sx:1, sy:1},
+                t/1000
+            ) || {x:0, y:0, sx:0, sy:0}
 
-            const steps = animationSteps( position, velocity, {x:0, y:0, sx:1, sy:1}, stiffness, damping, precision, period )
+            // compute the animation steps ( as array of css style )
+            const steps = animationSteps( position, velocity, {x:0, y:0, sx:1, sy:1}, stiffness, damping, precision, period/1000 )
 
-            if ( steps.length > 1 )
+            // if the animation is needed
+            if ( steps.length > 1 ) {
+
+                // run the animation
                 this.kill[ key ] = this.refs[ key ].animate( steps, steps.length * period )
+
+                // hold the params, in order to compute the velocity later
+                this.animations[ key ] = { x0:position, v0:velocity }
+            }
         }
 
         this.source = null
@@ -99,9 +129,10 @@ class Flippity extends Component {
 
         if ( this.shouldMesure ) {
 
+            this.shouldMesure = false
+
             this.computeTargetPosition()
 
-            this.shouldMesure = false
         }
     }
 

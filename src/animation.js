@@ -1,5 +1,5 @@
 
-import {steps}                      from './computeMotion'
+import {compute}                    from './math'
 import {create as createArray}      from './array'
 
 const transform = ({ x, y, sx, sy }) => {
@@ -8,6 +8,29 @@ const transform = ({ x, y, sx, sy }) => {
         transform: value,
         WebkitTransformtransform: value,
     }
+}
+
+const steps = ( x0, v0, target, k, b, precision, period ) => {
+
+    const c = compute( k, b )( x0 - target, v0 )
+
+    const arr = []
+    let x = null
+    let v = null
+    let t = 0
+
+    do {
+
+        x = c.x( t )
+        v = c.v( t )
+
+        t = t + period
+
+        arr.push( target + x )
+
+    }while( Math.abs( v ) > precision || Math.abs( x ) > precision )
+
+    return arr
 }
 
 const merge = ( steps ) =>

@@ -20,7 +20,7 @@ const style = {
 }
 const List = ({ items, resize }) =>
 (
-    <Flippity style={ style.list } className="list" childClassName="item" childStyle={ style.item } stiffness={ 0.01 } damping={ 0.15 } >
+    <Flippity style={ style.list } className="list" childClassName="item" childStyle={ style.item } stiffness={ 50 } damping={ 16 } >
         {
             () => items.map( x =>
                 <Item key={ x.id } {...x} resize={resize} />
