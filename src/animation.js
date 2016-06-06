@@ -2,7 +2,7 @@
 import {compute}                    from './math'
 import {create as createArray}      from './array'
 
-const transform = ({ x, y, sx, sy }) => {
+export const transform = ({ x, y, sx, sy }) => {
     const value = `translate3d(${ x }px, ${ y }px, 0) translate3d(${ -50*(1-sx) }%, ${ -50*(1-sy) }%,0) scale(${ sx },${ sy }) `
     return {
         transform: value,

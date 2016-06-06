@@ -3,7 +3,11 @@ import {create as createArray}      from './array'
 // precision
 const epsylon = 0.0001
 
-
+/**
+ *
+ * compute the instant acceleration
+ *
+ */
 export const acc = ( k, b, x, v, target ) =>
     - k * ( x - target ) - b * v
 
