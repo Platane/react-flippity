@@ -55,7 +55,7 @@ class Flippity extends Component {
      */
     computeTargetPosition(){
 
-        const precision     = this.props.precision || 0.1
+        const precision     = this.props.precision || 0.5
         const stiffness     = this.props.stiffness || 0.01
         const damping       = this.props.damping || 0.15
         const period        = this.props.period || 50

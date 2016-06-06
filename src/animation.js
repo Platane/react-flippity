@@ -51,13 +51,13 @@ const merge = ( steps ) =>
         })
 
 
-export const animationSteps = ( source, velocity, target, ...options ) =>
+export const animationSteps = ( source, velocity, target, k, b, precision, period ) =>
 
     merge(
         Object.keys( source )
             .reduce( (o, key) => {
 
-                o[key] = steps( source[ key ], velocity[ key ], target[ key ], ...options )
+                o[key] = steps( source[ key ], velocity[ key ], target[ key ], k, b, key[0] == 's' ? precision / 100 : precision, period )
 
                 return o
             }, {} )
