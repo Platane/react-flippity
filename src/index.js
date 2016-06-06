@@ -58,11 +58,13 @@ class Flippity extends Component {
         const precision     = this.props.precision || 0.5
         const stiffness     = this.props.stiffness || 0.01
         const damping       = this.props.damping || 0.15
-        const period        = this.props.period || 50
+        const period        = this.props.period || 100
 
         const now   = Date.now()
         const t     = now - (this.startDate || 0)
         this.startDate = now
+
+        const steps = {}
 
         for ( let key in this.refs ) {
 
@@ -94,18 +96,20 @@ class Flippity extends Component {
             ) || {x:0, y:0, sx:0, sy:0}
 
             // compute the animation steps ( as array of css style )
-            const steps = animationSteps( position, velocity, {x:0, y:0, sx:1, sy:1}, stiffness, damping, precision, period/1000 )
+            steps[ key ] = animationSteps( position, velocity, {x:0, y:0, sx:1, sy:1}, stiffness, damping, precision, period/1000 )
+
+            // hold the params, in order to compute the velocity later
+            this.animations[ key ] = { x0:position, v0:velocity }
+        }
+
+        // apply the animations
+        for( let key in this.refs )
 
             // if the animation is needed
-            if ( steps.length > 1 ) {
+            if ( steps[ key ].length > 1 )
 
                 // run the animation
-                this.kill[ key ] = this.refs[ key ].animate( steps, steps.length * period )
-
-                // hold the params, in order to compute the velocity later
-                this.animations[ key ] = { x0:position, v0:velocity }
-            }
-        }
+                this.kill[ key ] = this.refs[ key ].animate( steps[ key ], steps[ key ].length * period )
 
         this.source = null
     }
