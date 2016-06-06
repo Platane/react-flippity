@@ -16,7 +16,7 @@ class App extends Component {
             items:[
                 {id:1, width: 50, height: 50},
                 {id:2, width: 50, height: 50},
-                {id:3, width: 50, height: 50},
+                // {id:3, width: 50, height: 50},
             ]
         }
 
@@ -68,6 +68,7 @@ class App extends Component {
     }
 
     render(){
+        console.log( this.state.items.map( x => x.id ) )
         return (
             <div>
                 <Menu { ...this.methods } { ...this.state } resizable={ this.state.resizable } />
