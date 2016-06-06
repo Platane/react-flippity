@@ -35,6 +35,15 @@ class App extends Component {
                         }
                     )
                 }),
+            add100      : () => {
+                const n = this.state.items.reduce((max,item) => Math.max(item.id,max),1)+1
+                const items = this.state.items.slice()
+
+                for ( let i=100; i--;)
+                    items.push({ id: i+n, width:50, height:50 })
+                this.setState({ items })
+
+            },
             resize     : (id,size) => this.setState({
                 items: this.state.items
                     .map(
@@ -61,7 +70,7 @@ class App extends Component {
     render(){
         return (
             <div>
-                <Menu { ...this.methods } resizable={ this.state.resizable } />
+                <Menu { ...this.methods } { ...this.state } resizable={ this.state.resizable } />
                 <List { ...this.state } resize={ this.state.resizable && this.methods.resize }  />
             </div>
         )
